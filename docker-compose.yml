@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  redis:
+    image: redis:5.0.5
+    ports:
+      - 6379:6379
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src/:/code
+    depends_on:
+      - redis
+
+  worker:
+    build:
+      context: .
+      dockerfile: ./docker/worker/Dockerfile
+    volumes:
+      - ./src/:/code
+    depends_on:
+      - redis
+
+  
